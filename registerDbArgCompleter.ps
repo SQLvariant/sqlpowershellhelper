@@ -1,0 +1,15 @@
+Register-ArgumentCompleter -ParameterName Database -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+    if ($fakeBoundParameter.ContainsKey('ServerInstance')) {
+    (Get-SqlDatabase -ServerInstance $($fakeBoundParameter.ServerInstance)).Name | ForEach-Object {
+    $CompletionText = $_
+    New-Object System.Management.Automation.CompletionResult (
+              $CompletionText,
+              $_,
+              'ParameterValue',
+              "$_ (Database)"
+                )
+         }
+    }
+};
